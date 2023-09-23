@@ -1,6 +1,6 @@
 {
 	"id": "obsidian-dicam",
-	"name": "Dicam Generator",
+	"name": "Dicam Renderer",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
 	"description": "Render .dicam-files directly in Obsidian.",

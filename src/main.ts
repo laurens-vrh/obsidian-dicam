@@ -1,26 +1,35 @@
-import { Plugin } from "obsidian";
+import { Options, defaultOptions } from "dicam-generator/options.js";
+import { MarkdownView, Plugin } from "obsidian";
+import { DicamSettingTab } from "./DicamSettingTab";
 import { DICAM_VIEW_TYPE, DicamView } from "./DicamView";
-
-interface DicamPluginSettings {
-	mySetting: string;
-}
-
-const DEFAULT_SETTINGS: DicamPluginSettings = {
-	mySetting: "default",
-};
+import { render } from "./render";
 
 export default class DicamPlugin extends Plugin {
-	settings: DicamPluginSettings;
+	settings: Options;
 
 	async onload() {
 		await this.loadSettings();
+		this.addSettingTab(new DicamSettingTab(this.app, this));
 
-		this.registerView(DICAM_VIEW_TYPE, (leaf) => new DicamView(leaf));
+		this.registerView(DICAM_VIEW_TYPE, (leaf) => new DicamView(leaf, this));
 		this.registerExtensions(["dicam"], DICAM_VIEW_TYPE);
 
-		this.addRibbonIcon("dice", "Activate view", () => {
-			this.activateView();
-		});
+		this.registerMarkdownCodeBlockProcessor(
+			"dicam",
+			async (src, el, ctx) => {
+				render(this.settings, el, "", src);
+
+				this.app.workspace.getActiveViewOfType(MarkdownView);
+			}
+		);
+	}
+
+	async loadSettings() {
+		this.settings = Object.assign(defaultOptions, await this.loadData());
+	}
+
+	async saveSettings() {
+		await this.saveData(this.settings);
 	}
 
 	onunload() {}
@@ -34,17 +43,5 @@ export default class DicamPlugin extends Plugin {
 		this.app.workspace.revealLeaf(
 			this.app.workspace.getLeavesOfType(DICAM_VIEW_TYPE)[0]
 		);
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign(
-			{},
-			DEFAULT_SETTINGS,
-			await this.loadData()
-		);
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
 	}
 }
