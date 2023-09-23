@@ -8,6 +8,10 @@ If your plugin does not need CSS, delete this file.
 */
 
 .dicam-view {
-    width: min-content;
+    width: 600px;
     margin-inline: auto;
+}
+
+.dicam-canvas {
+    width: 100%;
 }

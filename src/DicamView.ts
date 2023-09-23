@@ -23,6 +23,7 @@ export class DicamView extends FileView {
 
 	async onLoadFile(file: TFile) {
 		const container = this.containerEl.children[1];
+		container.classList.add("dicam-view");
 		const fileContents = await file.vault.read(file);
 		this.metadata = render(
 			this.plugin.settings,

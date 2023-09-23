@@ -8,7 +8,6 @@ export function render(
 	file: string
 ) {
 	element.empty();
-	element.classList.add("dicam-view");
 
 	const parser = new Parser(fileName, file);
 	const metadata = parser.parseHeader();
@@ -18,6 +17,7 @@ export function render(
 	const { text, markings } = parser.parse();
 
 	const canvas = element.createEl("canvas");
+	canvas.classList.add("dicam-canvas");
 	const generator = new Generator(text, markings, canvas, this.settings);
 	generator.generate();
 
