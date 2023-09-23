@@ -8,6 +8,6 @@ If your plugin does not need CSS, delete this file.
 */
 
 .dicam-view {
-    max-width: 600px;
+    width: min-content;
     margin-inline: auto;
 }
